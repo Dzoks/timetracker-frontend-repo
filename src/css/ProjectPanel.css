@@ -1,0 +1,51 @@
+
+.project-buttons{
+    display: flex;
+    margin:16px;
+    
+    
+}
+
+.action-btn{
+    
+    margin:4px;
+
+}
+
+.project-info{
+    margin:16px;
+    border: 1px solid #ddd;
+    width:480px;
+    height: fit-content;
+    padding: 8px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 0px #ddd;
+
+}
+
+.project-info:hover{
+    box-shadow: 1px 1px 5px 1px #ddd;
+
+}
+
+.delete-btn:hover{
+    border-color: red !important;
+    color:red !important;
+}
+.user-timesheets{
+    margin:16px;
+    
+}
+
+.project-user{
+    margin:16px;
+
+}
+
+.project-container{
+    display: flex;
+    flex-flow: wrap;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-self: center;
+}

@@ -1,0 +1,16 @@
+.form-container{
+    display:flex;
+    align-content: center;
+    align-items: center;
+    margin: 8px;
+}
+
+.form-container .ant-form-explain{
+    display: none;
+    visibility: hidden;
+
+}
+
+.form-container .ant-form-item-with-help{
+    margin-bottom: 0px !important;
+}

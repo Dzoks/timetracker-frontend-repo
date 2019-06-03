@@ -1,0 +1,28 @@
+.timesheet-layout {
+    display: flex;
+    flex-flow: wrap
+}
+
+.calendar-layout .ant-radio-group {
+    display:none;
+}
+
+.date-render{
+    padding-inline-start:0px;
+    list-style-type: none;
+}
+
+.calendar-layout {
+   display: inline-flex;
+   flex:1
+
+}
+.sheet-layout {
+    display: inline-flex;
+    width:300px;
+    box-shadow: 4px 10px 8px 0px;
+
+
+
+    
+}

@@ -1,0 +1,17 @@
+.sheet-list{
+    padding-inline-start:0px;
+    border-radius: 4px;
+    padding: 4px;
+    list-style: none;
+    margin: 4px;
+}
+
+.sheet-list-item{
+    width:270px;
+    padding:4px;
+    display:flex;
+    margin: 6px;
+    box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.2);
+    align-items: center;
+    justify-content: space-between;
+}

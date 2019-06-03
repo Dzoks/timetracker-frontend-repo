@@ -1,0 +1,14 @@
+.logout-btn{
+    float: right;
+    margin-right: 16px;
+    margin-top: 8px;
+}
+
+.menu-logo{
+    float: left;
+    height:48px;
+}
+
+.header{
+    box-shadow: -2px -2px 7px 0px;
+}
