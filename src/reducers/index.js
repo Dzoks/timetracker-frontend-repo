@@ -17,6 +17,8 @@ const projectsReducer=(projects=[],action)=>{
         return [...projects,action.payload];
     else if (action.type===ActionType.DELETE_PROJECT){
         return projects.filter(p=>p.id!==action.payload);
+    }else if (action.type===ActionType.FINISH_PROJECT){
+        return [...projects.filter(p=>p.id!==action.payload.id),{...action.payload,finished:true}];
     }
     return projects;
 }

@@ -84,6 +84,20 @@ export const deleteProject= projectId => dispatch=>{
     });
 }
 
+export const finishProject= project => dispatch=>{
+    return new Promise((resolve,reject)=>{
+        axios.put(`hub/project/finish/${project.id}`).then(res=>{
+            if (res.status===200 && res.data){
+                dispatch({
+                    type:ActionType.FINISH_PROJECT,
+                    payload:project
+                });
+                resolve();
+            }
+        }).catch(err=>reject());
+    });
+}
+
 export const getTimesheets=userId=>dispatch=>{
     return new Promise((resolve,reject)=>{
         axios.get(`hub/timesheet/byUser/${userId}`).then(res=>{

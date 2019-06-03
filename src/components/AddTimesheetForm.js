@@ -72,6 +72,7 @@ class AddTimesheetForm extends React.Component {
     const timesheet={...this.props.form.getFieldsValue(),...this.formRef.props.form.getFieldsValue(),date:this.props.selectedDate};
     this.props.addTimesheet(timesheet).then(res=>{
       message.success("Uspješno dodavanje.")
+      this.props.form.resetFields();
       this.setState({loading:false,popupVisible:false});
 
     }).catch(err=>{
@@ -79,6 +80,10 @@ class AddTimesheetForm extends React.Component {
       message.error("Greška prilikom dodavanja.")
     })
   };
+
+  componentDidUpdate(){
+   
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -154,7 +159,7 @@ const mapStateToProps = state => {
   return {
     selectedDate:state.selectedDate,
     projects: state.projects.filter(
-      p => !p.finished && new Date(p.startDate) <= new Date()
+      p => !p.finished && new Date(p.startDate) <= state.selectedDate
     )
   };
 };

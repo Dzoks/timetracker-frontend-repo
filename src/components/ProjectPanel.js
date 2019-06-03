@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Popover, message, Modal, Tag } from "antd";
 import "../css/ProjectPanel.css";
-import { deleteProject } from "../actions";
+import { deleteProject,finishProject } from "../actions";
 import UserTimeSheetTable from "./UserTimesheetTable";
 import { connect } from "react-redux";
 import Axios from "axios";
@@ -23,6 +23,21 @@ class ProjectPanel extends React.Component {
         this.setState({ projectManager: `${user.firstName} ${user.lastName}` });
     });
   }
+
+  onFinish = () => {
+    Modal.confirm({
+      title: "Da li ste sigurni da želite da završite projekat?",
+      okText: "Da",
+      okType: "success",
+      cancelText: "Ne",
+      onOk: () => {
+        this.props
+          .finishProject(this.props.project)
+          .then(res => message.success("Projekat uspješno završen."))
+          .catch(err => message.error("Greška prilikom završavanja projekta."));
+      }
+    });
+  };
 
   onDelete = () => {
     Modal.confirm({
@@ -90,6 +105,9 @@ class ProjectPanel extends React.Component {
             </div>
           )}
           <div className="project-buttons">
+          {isProjectManager && (
+              <Button type="circle" icon="check" className="action-btn finish-btn" onClick={this.onFinish} />
+            )}
             {project.description && (
               <Popover
                 content={this.props.project.description}
@@ -121,5 +139,5 @@ export default connect(
   state => {
     return { user: state.userData };
   },
-  { deleteProject }
+  { deleteProject,finishProject }
 )(ProjectPanel);

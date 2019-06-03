@@ -28,6 +28,12 @@
 
 }
 
+.finish-btn:hover{
+    
+    border-color: green !important;
+    color:green !important;
+}
+
 .delete-btn:hover{
     border-color: red !important;
     color:red !important;
