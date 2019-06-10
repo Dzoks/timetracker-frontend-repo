@@ -1,7 +1,7 @@
 import React from "react";
 import { Table,Popover,Button } from "antd";
 import Axios from "axios";
-
+import dateformat from 'dateformat';
 class UserTimeSheetTable extends React.Component{
 
     constructor(props){
@@ -26,7 +26,7 @@ class UserTimeSheetTable extends React.Component{
     render(){
         return (
           <Table dataSource={this.state.timesheets} bordered pagination={{ defaultPageSize: 4}}>
-            <Table.Column title="Datum" dataIndex="date" key="date" width={150}  />
+            <Table.Column title="Datum" dataIndex="date" key="date" width={150} render={date=>dateformat(date,"dd.mm.yyyy.")}  />
             <Table.Column title="Broj sati" dataIndex="hours" key="hours" width={100} />
             <Table.Column
               title="Iznos"

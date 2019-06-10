@@ -18,7 +18,10 @@ const projectsReducer=(projects=[],action)=>{
     else if (action.type===ActionType.DELETE_PROJECT){
         return projects.filter(p=>p.id!==action.payload);
     }else if (action.type===ActionType.FINISH_PROJECT){
-        return [...projects.filter(p=>p.id!==action.payload.id),{...action.payload,finished:true}];
+        return projects.map(p=>p.id!==action.payload.id?p:{...p,...action.payload,finished:true});
+    }else if (action.type===ActionType.EDIT_PROJECT){
+        return projects.map(p=>p.id!==action.payload.id?p:{...p,...action.payload});
+
     }
     return projects;
 }
@@ -52,6 +55,7 @@ export const selectedMenuItemReducer=(selectedMenuItem="timesheet",action)=>{
     }
     return selectedMenuItem;
 }
+
 
 export default combineReducers({
     userData:authenticationReducer,

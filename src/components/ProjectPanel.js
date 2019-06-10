@@ -1,11 +1,13 @@
 import React from "react";
-import { Button, Popover, message, Modal, Tag } from "antd";
+import { Button, Popover, message, Modal, Tag, Tooltip } from "antd";
 import "../css/ProjectPanel.css";
-import { deleteProject,finishProject } from "../actions";
+import { deleteProject, finishProject } from "../actions";
 import UserTimeSheetTable from "./UserTimesheetTable";
 import { connect } from "react-redux";
 import Axios from "axios";
 import ProjectUsersTable from "./ProjectUsersTable";
+import EditProjectModal from "./EditProjectModal";
+import dateformat from 'dateformat';
 
 class ProjectPanel extends React.Component {
   constructor(props) {
@@ -14,6 +16,7 @@ class ProjectPanel extends React.Component {
       projectManager: null,
       userTimesheets: null,
     };
+    this.editRef=React.createRef();
   }
 
   componentDidMount() {
@@ -22,6 +25,10 @@ class ProjectPanel extends React.Component {
       if (user)
         this.setState({ projectManager: `${user.firstName} ${user.lastName}` });
     });
+  }
+
+  onEdit=()=>{
+    this.editRef.current.showModal();
   }
 
   onFinish = () => {
@@ -59,54 +66,47 @@ class ProjectPanel extends React.Component {
     const { projectManager } = this.state;
     let statusNode;
     if (project.finished)
-      statusNode=<Tag color="#87d068">Završen</Tag>;
-    else if (project.startDate<new Date())
-      statusNode=<Tag color="#2db7f5">Nije započet</Tag>;
+      statusNode = <Tag color="#87d068">Završen</Tag>;
+    else if (new Date(project.startDate) > new Date())
+      statusNode = <Tag color="#2db7f5">Nije započet</Tag>;
     else
-      statusNode=<Tag color="#108ee9">U toku</Tag>;
+      statusNode = <Tag color="#108ee9">U toku</Tag>;
     const isProjectManager = user.id === project.projectManagerId;
     return (
       <div className="project-panel">
+        <EditProjectModal project={project} ref={this.editRef} />
         <div className="project-container">
           <div className="project-info">
             <div className="project-manager">
               <strong>Rukovodilac projekta:</strong> {projectManager}
             </div>
             <div className="project-start date">
-              <strong>Datum početka:</strong> {project.startDate}
+              <strong>Datum početka:</strong> {dateformat(new Date(project.startDate),"dd.mm.yyyy.")}
             </div>
             <div className="project-status>">
               <strong>Status: </strong>{statusNode}
             </div>
-            {isProjectManager && (
-              <div>
-                <div className="project-end-date">
-                  <strong>Datum završetka (procjena): </strong>
-                  {project.estimatedEndDate}
-                </div>
-                <div className="project-budget>">
-                  <strong>Budžet (procjena): </strong>{project.estimatedBudget}
-                  KM
-                </div>
-                <div className="project-hours">
-                  <strong>Broj radnih sati (procjena): </strong>
-                  {project.estimatedWorkHours}
-                </div>
-              </div>
-            )}
+            {isProjectManager && <div className="total-hours>">
+              <strong>Utrošeno sati: </strong>{project.totalHours||0} h
+            </div>}
+            {isProjectManager && <div className="total-amount>">
+              <strong>Utrošeno sredstava: </strong>{project.totalAmount||0} KM
+            </div>}
           </div>
           {isProjectManager ? (
             <div className="project-users">
               <ProjectUsersTable project={project} />
             </div>
           ) : (
-            <div className="user-timesheets">
-              <UserTimeSheetTable userId={user.id} projectId={project.id} />
-            </div>
-          )}
-          <div className="project-buttons">
-          {isProjectManager && (
-              <Button type="circle" icon="check" className="action-btn finish-btn" onClick={this.onFinish} />
+              <div className="user-timesheets">
+                <UserTimeSheetTable userId={user.id} projectId={project.id} />
+              </div>
+            )}
+          {!project.finished && <div className="project-buttons">
+            {isProjectManager && (
+              <Tooltip title="Završavanje projekta">
+                <Button type="circle" icon="check" className="action-btn finish-btn" onClick={this.onFinish} />
+              </Tooltip>
             )}
             {project.description && (
               <Popover
@@ -118,17 +118,21 @@ class ProjectPanel extends React.Component {
               </Popover>
             )}
             {isProjectManager && (
-              <Button type="circle" icon="edit" className="action-btn" />
+              <Tooltip title="Izmjena">
+                <Button type="circle" icon="edit" className="action-btn" onClick={this.onEdit} />
+              </Tooltip>
             )}
             {isProjectManager && (
-              <Button
-                type="circle"
-                onClick={this.onDelete}
-                icon="delete"
-                className="action-btn delete-btn"
-              />
+              <Tooltip title="Brisanje">
+                <Button
+                  type="circle"
+                  onClick={this.onDelete}
+                  icon="delete"
+                  className="action-btn delete-btn"
+                />
+              </Tooltip>
             )}
-          </div>
+          </div>}
         </div>
       </div>
     );
@@ -139,5 +143,5 @@ export default connect(
   state => {
     return { user: state.userData };
   },
-  { deleteProject,finishProject }
+  { deleteProject, finishProject }
 )(ProjectPanel);

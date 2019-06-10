@@ -47,6 +47,7 @@ class AddTimesheetForm extends React.Component {
       popupVisible: false,
       loading: false
     };
+    this.formRef = React.createRef();
   }
 
   componentDidMount() {
@@ -69,20 +70,23 @@ class AddTimesheetForm extends React.Component {
   onAdd = e => {
     e.preventDefault();
     this.setState({ loading: true });
-    const timesheet={...this.props.form.getFieldsValue(),...this.formRef.props.form.getFieldsValue(),date:this.props.selectedDate};
-    this.props.addTimesheet(timesheet).then(res=>{
+    const timesheet = { ...this.props.form.getFieldsValue(), ...this.formRef.props.form.getFieldsValue(), date: this.props.selectedDate };
+    this.props.addTimesheet(timesheet).then(res => {
       message.success("Uspješno dodavanje.")
       this.props.form.resetFields();
-      this.setState({loading:false,popupVisible:false});
+      this.setState({ loading: false, popupVisible: false });
 
-    }).catch(err=>{
-      this.setState({loading:false});
+    }).catch(err => {
+      this.setState({ loading: false });
       message.error("Greška prilikom dodavanja.")
     })
   };
 
-  componentDidUpdate(){
-   
+  componentDidUpdate() {
+    const { form } = this.props;
+    const project = this.props.projects.find(p => p.userHasProjectId === form.getFieldsValue().userHasProjectId);
+    if (!project)
+      form.resetFields();
   }
 
   render() {
@@ -93,7 +97,7 @@ class AddTimesheetForm extends React.Component {
           wrappedComponentRef={this.saveFormRef}
           loading={this.state.loading}
           visible={this.state.popupVisible}
-          onCancel={() => this.setState({ popupVisible: false,loading:false })}
+          onCancel={() => this.setState({ popupVisible: false, loading: false })}
           onAdd={this.onAdd}
         />
         <Form
@@ -134,9 +138,10 @@ class AddTimesheetForm extends React.Component {
               <InputNumber
                 placeholder="h"
                 style={{ width: 50 }}
-                min="0"
-                step="1"
-                max="25"
+                min={0}
+                precision={0}
+                step={1}
+                max={24}
               />
             )}
           </Form.Item>
@@ -157,7 +162,7 @@ const WrappedForm = Form.create({ name: "normal_login" })(AddTimesheetForm);
 
 const mapStateToProps = state => {
   return {
-    selectedDate:state.selectedDate,
+    selectedDate: state.selectedDate,
     projects: state.projects.filter(
       p => !p.finished && new Date(p.startDate) <= state.selectedDate
     )

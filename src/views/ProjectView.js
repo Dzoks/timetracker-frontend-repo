@@ -48,7 +48,6 @@ class ProjectView extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
   return { projects: state.projects,isProjectManager:state.userData.userGroupId===UserGroups.PROJECT_MANAGER };
 };
 

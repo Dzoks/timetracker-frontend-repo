@@ -1,6 +1,8 @@
 .timesheet-layout {
     display: flex;
-    flex-flow: wrap
+    flex-flow: wrap;
+    height:-moz-available;         
+    height:-webkit-fill-available;  
 }
 
 .calendar-layout .ant-radio-group {

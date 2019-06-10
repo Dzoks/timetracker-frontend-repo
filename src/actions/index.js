@@ -70,6 +70,20 @@ export const addProject = project =>  dispatch =>{
     
 }
 
+export const editProject = project =>  dispatch =>{
+    return new Promise((resolve,reject)=>{
+        axios.put('hub/project',project).then(res=>{
+            if (res.status===200 && res.data){
+                dispatch({type:ActionType.EDIT_PROJECT,payload:project});
+                resolve(res);
+            }else{
+                reject();
+            }
+        }).catch(err=>reject());
+    });
+    
+}
+
 export const deleteProject= projectId => dispatch=>{
     return new Promise((resolve,reject)=>{
         axios.delete(`hub/project/${projectId}`).then(res=>{
@@ -133,6 +147,20 @@ export const deleteTimesheet=timesheetId=>dispatch=>{
                 dispatch({
                     type:ActionType.DELETE_TIMESHEET,
                     payload:timesheetId
+                });
+                resolve();
+            }else reject();
+        }).catch(err=>reject());
+    });
+}
+
+export const updatePassword=item=>dispatch=>{
+    return new Promise((resolve,reject)=>{
+        axios.put(`hub/user/changePassword`,item).then(res=>{
+            if (res.status===200&& res.data){
+                dispatch({
+                    type:ActionType.UPDATE_PASSWORD,
+                    payload:item
                 });
                 resolve();
             }else reject();

@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { getStateAction } from "./actions";
 import Header from "./components/Header";
 import { Spin, Icon } from "antd";
+import UserView from "./views/UserView";
 import "./css/LoginView.css";
 
 class App extends React.Component {
@@ -51,6 +52,12 @@ class App extends React.Component {
               path="/project"
               exact
               component={ProjectView}
+              authenticated={this.props.authenticated}
+            />
+            <PrivateRoute
+              path="/user"
+              exact
+              component={UserView}
               authenticated={this.props.authenticated}
             />
           </div>

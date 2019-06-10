@@ -41,11 +41,12 @@ class AddUserToProjectForm extends React.Component {
         return (
             <div>
                 <Form layout="inline" className="form-container" onSubmit={this.onSubmit}>
-                    <Form.Item>
+                    <Form.Item >
                         {getFieldDecorator("userId", {
                             rules: [{ required: true }]
                         })(<Select
                             showSearch
+                            style={{ width: 370 }}
                             placeholder="Odaberite korisnika"
                             optionFilterProp="children"
                             filterOption={(input, option) =>
@@ -70,7 +71,7 @@ class AddUserToProjectForm extends React.Component {
                         })(
                             <InputNumber
                                 placeholder="Satnica"
-                                min="0"
+                                min={0}
                             />
                         )}
                     </Form.Item>
