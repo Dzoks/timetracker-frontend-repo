@@ -16,3 +16,10 @@
 .change-password{
     margin-right: 8px;
 }
+
+.header-container{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}

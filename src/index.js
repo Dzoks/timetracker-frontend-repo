@@ -6,10 +6,13 @@ import {Provider} from 'react-redux';
 import {createStore, applyMiddleware,compose} from 'redux';
 import reducers from './reducers';
 import thunk from 'redux-thunk';
+import { ConfigProvider } from 'antd';
+import srRS from 'antd/es/locale-provider/sr_RS';
+
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 ReactDOM.render(<Provider store={createStore(reducers,composeEnhancer(applyMiddleware(thunk)))}>
-                    <App />
+                    <ConfigProvider locale={srRS}>><App /></ConfigProvider>
                 </Provider>,
                 document.getElementById('root'));
 

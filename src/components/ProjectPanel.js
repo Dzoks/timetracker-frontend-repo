@@ -86,12 +86,12 @@ class ProjectPanel extends React.Component {
             <div className="project-status>">
               <strong>Status: </strong>{statusNode}
             </div>
-            {isProjectManager && <div className="total-hours>">
+            <div className="total-hours>">
               <strong>Utrošeno sati: </strong>{project.totalHours||0} h
-            </div>}
-            {isProjectManager && <div className="total-amount>">
-              <strong>Utrošeno sredstava: </strong>{project.totalAmount||0} KM
-            </div>}
+            </div>
+            <div className="total-amount>">
+              <strong>{isProjectManager?'Utrošeno sredstava':'Zarada'}: </strong>{project.totalAmount||0} KM
+            </div>
           </div>
           {isProjectManager ? (
             <div className="project-users">

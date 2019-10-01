@@ -3,6 +3,7 @@
     flex-flow: wrap;
     height:-moz-available;         
     height:-webkit-fill-available;  
+    margin-top: 50px;
 }
 
 .calendar-layout .ant-radio-group {

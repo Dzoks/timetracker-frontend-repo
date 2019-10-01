@@ -38,7 +38,7 @@ class HeaderView extends React.Component {
   render() {
     if (this.props.authenticated)
       return (
-        <div>
+        <div className='header-container'>
           <ChangePasswordDialog ref={this.modalRef} />
           <img alt="logo" src={logo} className="menu-logo" />
           <Menu
