@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Modal, Input, DatePicker, message, InputNumber } from "antd";
+import { Button, Form, Modal, Input, DatePicker, message, InputNumber, Row, Col } from "antd";
 import { connect } from "react-redux";
 import { addProject } from "../actions";
 
@@ -15,29 +15,47 @@ const AddProjectForm = Form.create("addProjectForm")(
             })(<Input onPressEnter={this.props.onSubmit} autoFocus={true} />)}
           </Form.Item>
           <Form.Item label="Opis:">
-            {getFieldDecorator("description")(<Input onPressEnter={this.props.onSubmit} type="textarea" />)}
+            {getFieldDecorator("description")(<Input.TextArea rows={4} onPressEnter={this.props.onSubmit} type="textarea" />)}
           </Form.Item>
-          <Form.Item label="Datum početka:">
-            {getFieldDecorator("startDate", {
-              rules: [
-                {
-                  required: true,
-                  message: "Datum početka je obavezan!"
-                }
-              ]
-            })(<DatePicker onKeyDown={this.props.onSubmit} oplaceholder="Odaberite datum" format="DD.MM.YYYY" />)}
-          </Form.Item>
-          <Form.Item label="Satnica rukovodioca:">
-            {getFieldDecorator("hourRate", {
-              rules: [
-                {
-                  required: true,
-                  message: "Satnica rukovodioca je obavezna!"
-                }
-              ]
-            })(<InputNumber 
-              onKeyDown={e => { if (e.keyCode === 13) this.props.onSubmit() }} min={1} />)}
-          </Form.Item>
+          <Row>
+            <Col span={12}>
+              <Form.Item label="Datum početka:">
+                {getFieldDecorator("startDate", {
+                  rules: [
+                    {
+                      required: true,
+                      message: "Datum početka je obavezan!"
+                    }
+                  ]
+                })(<DatePicker onKeyDown={this.props.onSubmit} format="DD.MM.YYYY" />)}
+              </Form.Item>
+            </Col>
+            <Col span={12}> <Form.Item layout="inline" label="Datum završetka (procjena):">
+              {getFieldDecorator("estimatedEndDate", {
+              })(<DatePicker onKeyDown={this.props.onSubmit} format="DD.MM.YYYY" />)}
+            </Form.Item></Col>
+          </Row>
+          <Row>
+            <Col span={12}>
+              <Form.Item label="Satnica rukovodioca:">
+                {getFieldDecorator("hourRate", {
+                  rules: [
+                    {
+                      required: true,
+                      message: "Satnica rukovodioca je obavezna!"
+                    }
+                  ]
+                })(<InputNumber
+                  onKeyDown={e => { if (e.keyCode === 13) this.props.onSubmit() }} min={1} />)}
+              </Form.Item>
+
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Budžet:">
+                {getFieldDecorator("budget")(<InputNumber onKeyDown={e => { if (e.keyCode === 13) this.props.onSubmit() }} min={1} />)}
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       );
     }
@@ -87,6 +105,7 @@ class AddProjectModal extends React.Component {
   render() {
     return (
       <Modal
+        style={{ top: 30 }}
         visible={this.state.visible}
         title="Dodavanje novog projekta"
         onCancel={this.onAddCancel}

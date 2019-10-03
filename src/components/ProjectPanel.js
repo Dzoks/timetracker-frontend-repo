@@ -86,6 +86,12 @@ class ProjectPanel extends React.Component {
             <div className="project-status>">
               <strong>Status: </strong>{statusNode}
             </div>
+            {(project.finished||project.estimatedEndDate)&&<div className="project-start date">
+              <strong>Datum završetka {!project.finished&&'(procjena)'}:</strong> {dateformat(new Date(project.finished?project.endDate:project.estimatedEndDate),"dd.mm.yyyy.")}
+            </div>}
+            {isProjectManager&&project.budget&&<div className="total-hours>">
+              <strong>Budžet: </strong>{project.budget||0} KM
+            </div>}
             <div className="total-hours>">
               <strong>Utrošeno sati: </strong>{project.totalHours||0} h
             </div>

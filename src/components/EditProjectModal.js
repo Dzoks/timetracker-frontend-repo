@@ -1,16 +1,17 @@
 import React from "react";
-import { Form, Modal, Input, DatePicker, message, Button } from "antd";
+import { Form, Modal, Input, DatePicker, message, Button, Row, Col,InputNumber } from "antd";
 import { connect } from "react-redux";
 import { editProject } from "../actions";
 import moment from 'moment';
 
-const EditProjectForm = Form.create({name:"editProject"})(
+const EditProjectForm = Form.create({ name: "editProject" })(
     class extends React.Component {
 
-        componentDidMount(){
-            let {startDate}=this.props.project;
-            startDate=new Date(startDate);
-            this.props.form.setFieldsValue({...this.props.project, startDate:moment(startDate)});
+        componentDidMount() {
+            let { startDate, estimatedEndDate } = this.props.project;
+            startDate = moment(new Date(startDate));
+            estimatedEndDate = estimatedEndDate ?  moment(new Date(estimatedEndDate)):null;
+            this.props.form.setFieldsValue({ ...this.props.project, startDate, estimatedEndDate });
             // TODO projekat
         }
 
@@ -24,17 +25,29 @@ const EditProjectForm = Form.create({name:"editProject"})(
                         })(<Input onPressEnter={this.props.onSubmit} autoFocus={true} />)}
                     </Form.Item>
                     <Form.Item label="Opis:">
-                        {getFieldDecorator("description")(<Input onPressEnter={this.props.onSubmit} type="textarea" />)}
+                        {getFieldDecorator("description")(<Input.TextArea lines={4} onPressEnter={this.props.onSubmit} type="textarea" />)}
                     </Form.Item>
-                    <Form.Item label="Datum početka:"  >
-                        {getFieldDecorator("startDate", {
-                            rules: [
-                                {
-                                    required: true,
-                                    message: "Datum početka je obavezan!"
-                                }
-                            ]
-                        })(<DatePicker disabled={this.props.project.totalHours>0} format="DD.MM.YYYY"  />)}
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item label="Datum početka:"  >
+                                {getFieldDecorator("startDate", {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: "Datum početka je obavezan!"
+                                        }
+                                    ]
+                                })(<DatePicker disabled={this.props.project.totalHours > 0} format="DD.MM.YYYY" />)}
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="Datum završetka (procjena):"  >
+                                {getFieldDecorator("estimatedEndDate")(<DatePicker format="DD.MM.YYYY" />)}
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Form.Item label="Budžet (KM):">
+                        {getFieldDecorator("budget")(<InputNumber onKeyDown={e => { if (e.keyCode === 13) this.props.onSubmit() }} min={1} />)}
                     </Form.Item>
                 </Form>
             );
@@ -69,7 +82,7 @@ class EditProjectModal extends React.Component {
             if (!err) {
                 this.setState({ confirmLoading: true });
                 this.props
-                    .editProject({...this.props.project,...values})
+                    .editProject({ ...this.props.project, ...values })
                     .then(res => {
                         this.form.props.form.resetFields();
 
@@ -87,6 +100,7 @@ class EditProjectModal extends React.Component {
     render() {
         return (
             <Modal
+                style={{ top: 30 }}
                 visible={this.state.visible}
                 title="Izmjena projekta"
                 okText="Sačuvajte"
@@ -95,18 +109,18 @@ class EditProjectModal extends React.Component {
                 destroyOnClose={true}
                 footer={[
                     <Button key="back" onClick={this.onEditCancel}>
-                      Nazad
+                        Nazad
                     </Button>,
                     <Button
-                      form="editProject"
-                      htmlType="submit"
-                      type="primary"
-                      loading={this.state.confirmLoading}
-                      onClick={this.onEdit}
+                        form="editProject"
+                        htmlType="submit"
+                        type="primary"
+                        loading={this.state.confirmLoading}
+                        onClick={this.onEdit}
                     >
-                      Sačuvaj
+                        Sačuvaj
                     </Button>
-                  ]}
+                ]}
             >
                 <EditProjectForm onSubmit={this.onEdit} project={this.props.project} wrappedComponentRef={form => (this.form = form)} />
             </Modal>
