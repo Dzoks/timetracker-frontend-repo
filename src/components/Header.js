@@ -5,8 +5,9 @@ import "../css/Header.css";
 import { logoutAction } from "../actions";
 import { connect } from "react-redux";
 import logo from "../images/logo.png";
-import {userGroups} from "../util";
+import { userGroups } from "../util";
 import ChangePasswordDialog from "./ChangePasswordDialog";
+import ChartModal from "./ChartModal";
 
 class HeaderView extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class HeaderView extends React.Component {
       current: "timesheet"
     };
     this.modalRef = React.createRef();
+    this.chartModalRef=React.createRef();
   }
 
 
@@ -35,11 +37,21 @@ class HeaderView extends React.Component {
     });
   };
 
+  onShowChart = () => {
+    const options = [
+      { id: "1", text: 'Utrošak sati', lineUrl: `hub/chart/hours`, pieUrl: `hub/chart/hours/projects` },
+      { id: "2", text: 'Utrošak novca', lineUrl: `hub/chart/turnover`, pieUrl: `hub/chart/turnover/projects` }
+    ];
+    this.chartModalRef.current.showModal(options);
+  }
+
   render() {
     if (this.props.authenticated)
       return (
         <div className='header-container'>
           <ChangePasswordDialog ref={this.modalRef} />
+          <ChartModal title="Izvještaji" ref={this.chartModalRef} />
+
           <img alt="logo" src={logo} className="menu-logo" />
           <Menu
             onClick={this.handleClick}
@@ -54,9 +66,11 @@ class HeaderView extends React.Component {
               <Link to="/project">Projekti</Link>
             </Menu.Item>
             <Menu.Item key="user">
-              <Link hidden={this.props.user.userGroupId===userGroups.USER} to="/user">Korisnici</Link>
+              <Link hidden={this.props.user.userGroupId === userGroups.USER} to="/user">Korisnici</Link>
             </Menu.Item>
+
             <span style={{ float: "right" }}>
+
               <span style={{ marginRight: '8px' }} >
                 <strong>
                   <i>
@@ -64,6 +78,8 @@ class HeaderView extends React.Component {
                   </i>
                 </strong>
               </span>
+              <Tooltip title="Izvještaji"><Icon type="line-chart" className="change-password" onClick={this.onShowChart} /></Tooltip>
+
               <Tooltip title="Promijenite lozinku"><Icon type="lock" className="change-password" onClick={this.showModal} /></Tooltip>
               <Button
                 className="logout-btn"

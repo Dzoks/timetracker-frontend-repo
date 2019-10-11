@@ -8,6 +8,7 @@ import Axios from "axios";
 import ProjectUsersTable from "./ProjectUsersTable";
 import EditProjectModal from "./EditProjectModal";
 import dateformat from 'dateformat';
+import ChartModal from "./ChartModal";
 
 class ProjectPanel extends React.Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class ProjectPanel extends React.Component {
       projectManager: null,
       userTimesheets: null,
     };
-    this.editRef=React.createRef();
+    this.editRef = React.createRef();
+    this.chartModalRef = React.createRef();
   }
 
   componentDidMount() {
@@ -27,8 +29,17 @@ class ProjectPanel extends React.Component {
     });
   }
 
-  onEdit=()=>{
+  onEdit = () => {
     this.editRef.current.showModal();
+  }
+
+  onShowChart = () => {
+    const {project}=this.props;
+    const options = [
+      { id:"1", text: 'Utrošak sati', lineUrl: `hub/chart/hours/${project.id}`, pieUrl: `hub/chart/hours/${project.id}/users` },
+      { id:"2", text: 'Utrošak novca', lineUrl: `hub/chart/turnover/${project.id}`, pieUrl: `hub/chart/turnover/${project.id}/users` }
+    ];
+    this.chartModalRef.current.showModal(options);
   }
 
   onFinish = () => {
@@ -75,28 +86,29 @@ class ProjectPanel extends React.Component {
     return (
       <div className="project-panel">
         <EditProjectModal project={project} ref={this.editRef} />
+        <ChartModal title="Izvještaji" ref={this.chartModalRef} />
         <div className="project-container">
           <div className="project-info">
             <div className="project-manager">
               <strong>Rukovodilac projekta:</strong> {projectManager}
             </div>
             <div className="project-start date">
-              <strong>Datum početka:</strong> {dateformat(new Date(project.startDate),"dd.mm.yyyy.")}
+              <strong>Datum početka:</strong> {dateformat(new Date(project.startDate), "dd.mm.yyyy.")}
             </div>
             <div className="project-status>">
               <strong>Status: </strong>{statusNode}
             </div>
-            {(project.finished||project.estimatedEndDate)&&<div className="project-start date">
-              <strong>Datum završetka {!project.finished&&'(procjena)'}:</strong> {dateformat(new Date(project.finished?project.endDate:project.estimatedEndDate),"dd.mm.yyyy.")}
+            {(project.finished || project.estimatedEndDate) && <div className="project-start date">
+              <strong>Datum završetka {!project.finished && '(procjena)'}:</strong> {dateformat(new Date(project.finished ? project.endDate : project.estimatedEndDate), "dd.mm.yyyy.")}
             </div>}
-            {isProjectManager&&project.budget&&<div className="total-hours>">
-              <strong>Budžet: </strong>{project.budget||0} KM
+            {isProjectManager && project.budget && <div className="total-hours>">
+              <strong>Budžet: </strong>{project.budget || 0} KM
             </div>}
             <div className="total-hours>">
-              <strong>Utrošeno sati: </strong>{project.totalHours||0} h
+              <strong>Utrošeno sati: </strong>{project.totalHours || 0} h
             </div>
             <div className="total-amount>">
-              <strong>{isProjectManager?'Utrošeno sredstava':'Zarada'}: </strong>{project.totalAmount||0} KM
+              <strong>{isProjectManager ? 'Utrošeno sredstava' : 'Zarada'}: </strong>{project.totalAmount || 0} KM
             </div>
           </div>
           {isProjectManager ? (
@@ -123,6 +135,12 @@ class ProjectPanel extends React.Component {
                 <Button type="circle" icon="info" className="action-btn" />
               </Popover>
             )}
+            {
+              isProjectManager && (
+                <Tooltip title="Izvještaji">
+                  <Button type="circle" icon="line-chart" className="action-btn" onClick={this.onShowChart} />
+                </Tooltip>
+              )}
             {isProjectManager && (
               <Tooltip title="Izmjena">
                 <Button type="circle" icon="edit" className="action-btn" onClick={this.onEdit} />

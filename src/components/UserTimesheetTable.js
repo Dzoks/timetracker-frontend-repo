@@ -25,7 +25,7 @@ class UserTimeSheetTable extends React.Component{
 
     render(){
         return (
-          <Table dataSource={this.state.timesheets} bordered pagination={{ defaultPageSize: 4}}>
+          <Table rowKey="id" dataSource={this.state.timesheets} bordered pagination={{ defaultPageSize: 4}}>
             <Table.Column title="Datum" dataIndex="date" key="date" width={150} render={date=>dateformat(date,"dd.mm.yyyy.")}  />
             <Table.Column title="Broj sati" dataIndex="hours" key="hours" width={100} />
             <Table.Column
