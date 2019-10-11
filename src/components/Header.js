@@ -40,7 +40,7 @@ class HeaderView extends React.Component {
   onShowChart = () => {
     const options = [
       { id: "1", text: 'Utrošak sati', lineUrl: `hub/chart/hours`, pieUrl: `hub/chart/hours/projects` },
-      { id: "2", text: 'Utrošak novca', lineUrl: `hub/chart/turnover`, pieUrl: `hub/chart/turnover/projects` }
+      { id: "2", text: 'Zarada', lineUrl: `hub/chart/turnover`, pieUrl: `hub/chart/turnover/projects` }
     ];
     this.chartModalRef.current.showModal(options);
   }
