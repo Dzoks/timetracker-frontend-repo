@@ -5,7 +5,7 @@ function LineChart(props) {
 
     const label = {
         textStyle: {
-            fill: '#aaaaaa'
+            fill: '#aaaaaa',
         }
     }
  
@@ -13,9 +13,10 @@ function LineChart(props) {
         return { Iznos:d.value, date: moment(new Date(d.date)).format('DD.MM.YYYY.') };
     });
     return (
-        <Chart width={550}  data={data} height={400} scale={[{
+        <Chart   data={data} width={550} height={400} padding={[20,40,20,40]} scale={[{
             dataKey: 'date',
-            range: [0, 1]
+            range: [0, 1],
+            tickCount:8
         }]}>
             <Tooltip />
             <Axis dataKey="Iznos" label={label} />
